@@ -170,10 +170,10 @@ if __name__ == "__main__":
         categories = ["abstract", "figurative", "landscape", "religion", "mythology", "posters", "animals", "illustration", "fashion", "still-life", "historical", "botanical", "drawings", "japanese-art"]
 
         for category in categories:
-            noPages = pageCounter(category)
+            no_pages = pageCounter(category)
 
             #Pagination
-            for p in range(1, noPages + 1):
+            for p in range(1, no_pages + 1):
                 print("Currently looking at: %s, page %d" % (category, p))
                 url = "https://artvee.com/c/%s/page/%d/?per_page=48" % (category, p)
                 scrape_meta_images(url, category, data_path, writer, s3)
