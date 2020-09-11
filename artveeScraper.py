@@ -62,6 +62,8 @@ def scrape_meta_images(url, category, dataPath, writer, s3):
         URL for the paginated category pages
     category : str
         String representation of the category used in the url
+    dataPath : str
+        String representation of the path where the csv, json, and temporary images will be stored
     writer
         CSV Writer passed in to be able to write the appended elements in data to the csv
     s3 : botocore.client.S3
