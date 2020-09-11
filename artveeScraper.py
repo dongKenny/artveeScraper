@@ -24,15 +24,15 @@ def create_bucket(bucketName, region=None):
         return False
     return True
 
-def upload_file(fileName, bucket, objectName=None):
+def upload_file(file_name, bucket, objectName=None):
       # If S3 object_name was not specified, use file_name
     if objectName is None:
-        objectName = fileName
+        objectName = file_name
 
     # Upload the file
     s3_client = boto3.client('s3')
     try:
-        response = s3_client.upload_file(fileName, bucket, objectName)
+        response = s3_client.upload_file(file_name, bucket, objectName)
     except ClientError as e:
         logging.error(e)
         return False
