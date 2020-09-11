@@ -53,7 +53,7 @@ def createJSON(csvPath, jsonPath):
     with open(jsonPath, 'w', encoding='utf-8') as jsonW: 
         jsonW.write(json.dumps(data, indent=4)) 
 
-def getMeta(url, category, dataPath, writer, s3):
+def scrape_meta_images(url, category, dataPath, writer, s3):
 
     """
     Parameters  
@@ -168,7 +168,7 @@ def main():
             for p in range(1, noPages + 1):
                 print("Currently looking at: %s, page %d" % (category, p))
                 url = "https://artvee.com/c/%s/page/%d/?per_page=48" % (category, p)
-                getMeta(url, category, dataPath, writer, s3)
+                scrape_meta_images(url, category, dataPath, writer, s3)
 
         f.close()
 
