@@ -172,13 +172,10 @@ if __name__ == "__main__":
     data_path = ""
     csv_path = os.path.join(data_path, "artvee.csv")
     json_path = os.path.join(data_path + "artvee.json")
-            
-    with open(csv_path, "w", newline = "", encoding="utf-8") as f:
-
-        if (data_path == ""):
-            print("\nPlease assign a value to the data_path\n")
-            f.close()
-        else:
+    if (data_path == ""):
+        print("\nPlease assign a value to the data_path\n")
+    else:
+        with open(csv_path, "w", newline = "", encoding="utf-8") as f:
             #Create csv writer and header row
             headers = ["Title", "Artist", "Category"]
             writer = csv.writer(f)
@@ -198,7 +195,7 @@ if __name__ == "__main__":
 
             f.close()
 
-    #Create the json after all data is written in the csv and upload it to s3 bucket
-    create_json(csv_path, json_path)
-    with open(json_path, "rb") as s3_meta:
-        s3.upload_fileobj(s3_meta, "artvee", "artveeMeta.json")
+        #Create the json after all data is written in the csv and upload it to s3 bucket
+        create_json(csv_path, json_path)
+        with open(json_path, "rb") as s3_meta:
+            s3.upload_fileobj(s3_meta, "artvee", "artveeMeta.json")
