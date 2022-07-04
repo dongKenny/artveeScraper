@@ -74,9 +74,11 @@ def scrape_images(img_source, img_index, title, data_path, s3):
         Closes the streams and deletes the image from file after upload
     """
 
-    img_dl_page = requests.get(img_source[img_index].get("href"))
+    img_dl_page = requests.get("https://artvee.com/" + img_source[img_index].get("data-url"))
     img_soup = BeautifulSoup(img_dl_page.content, "html.parser")
-    img_link = img_soup.find("a", {"class" : "prem-link gr btn btn-secondary dis snax-action snax-action-add-to-collection snax-action-add-to-collection-downloads"}).get("href")
+    
+    img_link = img_soup.find("a", {"class" : "prem-link gr btn dis snax-action snax-action-add-to-collection snax-action-add-to-collection-downloads"}).get("href")
+    print(img_link)
     img_name = title + ".jpg"
     img_path = os.path.join(data_path, img_name)
 
@@ -108,11 +110,11 @@ def scrape_meta_images(url, category, data_path, writer, s3):
         Scrapes the image and uploads it
         Writes data to the csv and moves to the next card
     """
-
+    
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
     cards = soup.find_all("div", {"class" : re.compile("product-grid-item product woodmart-hover-tiled*")})
-    img_source = soup.find_all("a", {"class" : "product-image-link linko"})
+    img_source = soup.find_all("div", {"class": "product-element-top product-image-link pttl linko"})
     img_index = 0
 
     for card in cards:
@@ -158,7 +160,7 @@ def count_pages(category):
     url = "https://artvee.com/c/%s/page/1/?per_page=48" % category
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
-    results = soup.find("p", class_="woocommerce-result-count").text.strip("results").strip()
+    results = soup.find("p", class_="woocommerce-result-count").text.strip("items").strip()
     no_pages = math.floor(int(results) / 48)
 
     if (int(results) % 48 > 0):
@@ -168,10 +170,10 @@ def count_pages(category):
 
 if __name__ == "__main__":
     s3 = boto3.client('s3')
-    create_bucket("artvee", s3, "us-west-1")
+    create_bucket("artvee", s3, "us-west-1")  #  Use a unique bucket name
     data_path = ""
     csv_path = os.path.join(data_path, "artvee.csv")
-    json_path = os.path.join(data_path + "artvee.json")
+    json_path = os.path.join(data_path, "artvee.json")
     if (data_path == ""):
         print("\nPlease assign a value to the data_path\n")
     else:
